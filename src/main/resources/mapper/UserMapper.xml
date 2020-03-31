@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssm.dao.UserMapper">
+	
+	
+	<!-- 根据用户名称查询用户列表(模糊查询) -->
+	<select id="getUserListByName" resultType="User">
+		select * from user
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="userName != null and userName != ''">
+				AND userName like CONCAT('%',#{userName},'%')
+			</if>
+		</trim>
+	</select>
+
+	<!-- 插入新用户信息 -->
+	<insert id="add" parameterType="User">
+		insert into user(userCode,userName,userPassword,gender,birthday,phone,
+								address,userRole,createdBy,creationDate)
+				values(#{userCode},#{userName},#{userPassword},#{gender},#{birthday},#{phone},
+				#{address},#{userRole},#{createdBy},now());
+	</insert>
+
+	<!-- 根据userId删除用户信息 -->
+	<delete id="deleteUserById" parameterType="Integer">
+		delete from user where id=#{id}
+	</delete>
+
+</mapper>
